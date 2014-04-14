@@ -1,7 +1,6 @@
 '''
-Created on Apr 11, 2014
-
-@author: The Oracle
+taken from: 
+https://github.com/cdzombak/groupme-tools
 '''
 import sys
 reload(sys)
