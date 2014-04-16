@@ -18,29 +18,78 @@ def convertToTime(messeduptime):
 def timeStruct(messeduptime):
     return time.localtime(messeduptime)
 
-
-    '''
-    everything.append((creator,message,peopleWhoLikedThePost,timeStamp,timeStampInSeconds,pictureURL,numberOfLikes))
-    takes in buffer time in terms of seconds and returns a dictionary of 
-    key: message,creator
-    value: how many people who responded to that message within buffer time
-    '''
 def responseRate(everything,bufferTime):
     d={}
+    dictOfResponseCount={}
     for i in range(len(everything)):
         for j in range(i,len(everything)):
             if (everything[j][4]-everything[i][4]<bufferTime):
-                message=everything[i][1]
-                creator = everything[i][0]
+                message=str(everything[i][1])
+                creator = str(everything[i][0])
                 key=(message,creator)
+                respondent=str(everything[j][0])
                 if key not in d:
                     d[key]=0
                 d[key]+=1
-    return d
+                if respondent not in dictOfResponseCount:
+                    dictOfResponseCount[respondent]=0
+                dictOfResponseCount[respondent]+=1
+    return d,dictOfResponseCount
 
 def findMostPopularMessage(everything,topN):
     sortedList = sorted(everything,key=operator.itemgetter(6),reverse=True)
     return sortedList[:topN]
+
+'''((creator,message,peopleWhoLikedThePost,timeStamp,timeStampInSeconds,pictureURL,numberOfLikes))'''
+def findMostLikes(everything):
+    d={}
+    for each_message in everything:
+        creator = str(each_message[0])
+        numLikes=each_message[6]
+        if creator not in d:
+            d[creator]=(0,0)
+        tupz = d[creator]
+        #tupz0 is the message count and tupz1 is the numlikes
+        tupMessageCount=(tupz[0]+1)
+        tupNumLikes=(tupz[1]+numLikes)
+        d[creator]=(tupMessageCount,tupNumLikes)
+    return d
+
+def processMostLikes(d):
+    lst=[]
+    for creator,countLikesTup in d.iteritems():
+        lst.append((creator,(1.0*countLikesTup[1]/countLikesTup[0]),countLikesTup[0]))
+    return sorted(lst,key=operator.itemgetter(1),reverse=True)
+
+def findResponseRateOfEachPerson(everything):
+    '''find how the time for each person to reply to messages
+    ignores sequential messages'''
+    d={}
+    return d
+
+def findParticipationRateInThreads(everything):
+    d={}
+    return d
+
+def findWhoWillRespondToYou(threads):
+    '''for every creator of the thread, this finds the people most likely to reply to you'''
+    d={}
+    return d
+
+
+def findUsagePatterns(everything):
+    '''finds the usage per day ie how many messages on Sunday compared to Monday
+    finds usage patterns during certain times of the day'''
+    d={}
+    return d
+
+def processMessagesToThreads(everything,bufferTime):
+    '''converts the list of messages to a list of threads according to a bufferTime'''
+    output=[]
+    return  output
+
+
+
 
                 
 '''variables'''
@@ -54,10 +103,9 @@ everything=[]
 '''
 ===============================================================================================
 '''
-json_data=open('transcript-5511880.json')
+json_data=open('transcript-5411880.json')
 data = json.load(json_data)
 for eachMessage in data:
-    print eachMessage[u'created_at']
     #timestamps
     timeStamp = convertToTime(eachMessage[u'created_at'])
     allTheTimeStamps.append(timeStamp)
@@ -86,31 +134,46 @@ json_data.close()
 
 print "These are the names of all the members."
 print allMembers
-  
+print "This is the number of members.",len(allMembers)
+ 
 print "This is the sorted list of members - message count."
 sortedMessageCount = sorted(messageCount.iteritems(),key=operator.itemgetter(1),reverse=True)
 print sortedMessageCount
-  
+
+'''
 print "This is the list of all time stamps."
 print allTheTimeStamps
 print allTheTimeStampsInSeconds
-#  
-print "This is the sorted list of messages per day"
-sortedMessagesPerDayByCount = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(1),reverse=True)
-sortedMessagesPerDayByDay = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(0))
-print sortedMessagesPerDayByDay
+'''
+
+# print "This is the sorted list of messages per day"
+# sortedMessagesPerDayByCount = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(1),reverse=True)
+# sortedMessagesPerDayByDay = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(0))
+# print sortedMessagesPerDayByDay
 # print sortedMessagesPerDayByCount
-# 
-responseResult= responseRate(everything,120)
+
+
+responseResult= responseRate(everything,120)[0]
 sortedResponseResult = sorted(responseResult.iteritems(),key=operator.itemgetter(1),reverse=True)
+print "This is the list of messages: response count of messages which were responded within the buffer"
 print sortedResponseResult
 
-mostPopularMessages = findMostPopularMessage(everything,5)
+#print the list of the most responsive and least responsive people within the buffer
+whoIsTheMostResponsive = responseRate(everything,2400)[1]
+sortedwhoIsTheMostResponsive = sorted(whoIsTheMostResponsive.iteritems(),key=operator.itemgetter(1),reverse=True)
+print "This is a list of people and the number of messages they respond to within the buffer time"
+print sortedwhoIsTheMostResponsive
+
+mostPopularMessages = findMostPopularMessage(everything,10)
+print "This is the list of most popular messages"
 print mostPopularMessages
-# print everything
 
+mostLikes = findMostLikes(everything)
+processedMostLikes = processMostLikes(mostLikes)
+print "This is the list of creators, number of likes per messages, and number of messages sent"
+print processedMostLikes
 
-
+print everything
 
 
 if __name__ == '__main__':
