@@ -54,10 +54,10 @@ everything=[]
 '''
 ===============================================================================================
 '''
-json_data=open('transcript-5511880.json')
+json_data=open('transcript-5411880.json')
 data = json.load(json_data)
 for eachMessage in data:
-    print eachMessage[u'created_at']
+#    print eachMessage[u'created_at']
     #timestamps
     timeStamp = convertToTime(eachMessage[u'created_at'])
     allTheTimeStamps.append(timeStamp)
@@ -91,19 +91,20 @@ print "This is the sorted list of members - message count."
 sortedMessageCount = sorted(messageCount.iteritems(),key=operator.itemgetter(1),reverse=True)
 print sortedMessageCount
   
-print "This is the list of all time stamps."
-print allTheTimeStamps
-print allTheTimeStampsInSeconds
+#print "This is the list of all time stamps."
+#print allTheTimeStamps
+#print allTheTimeStampsInSeconds
 #  
-print "This is the sorted list of messages per day"
-sortedMessagesPerDayByCount = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(1),reverse=True)
-sortedMessagesPerDayByDay = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(0))
-print sortedMessagesPerDayByDay
+#print "This is the sorted list of messages per day"
+#sortedMessagesPerDayByCount = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(1),reverse=True)
+#sortedMessagesPerDayByDay = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(0))
+#print sortedMessagesPerDayByDay
+
 # print sortedMessagesPerDayByCount
-# 
-responseResult= responseRate(everything,120)
-sortedResponseResult = sorted(responseResult.iteritems(),key=operator.itemgetter(1),reverse=True)
-print sortedResponseResult
+## 
+#responseResult= responseRate(everything,120)
+#sortedResponseResult = sorted(responseResult.iteritems(),key=operator.itemgetter(1),reverse=True)
+#print sortedResponseResult
 
 mostPopularMessages = findMostPopularMessage(everything,5)
 print mostPopularMessages
