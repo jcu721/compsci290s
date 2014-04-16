@@ -4,7 +4,6 @@ Created on Apr 11, 2014
 @author: The Oracle
 '''
 import json, time, operator
-from pprint import pprint
 
 month_dict = {"Jan":1,"Feb":2,"Mar":3,"Apr":4, "May":5, "Jun":6,
        "Jul":7,"Aug":8,"Sep":9,"Oct":10,"Nov":11,"Dec":12}
@@ -61,15 +60,15 @@ def processMostLikes(d):
         lst.append((creator,(1.0*countLikesTup[1]/countLikesTup[0]),countLikesTup[0]))
     return sorted(lst,key=operator.itemgetter(1),reverse=True)
 
-def findResponseRateOfEachPerson(everything):
+def findResponseTimeOfEachPerson(threads):
     '''find how the time for each person to reply to messages
-    ignores sequential messages'''
-    d={}
+    ignores sequential messages
+    finds participation rate in threads
+    '''
+    d={}            
     return d
 
-def findParticipationRateInThreads(everything):
-    d={}
-    return d
+
 
 def findWhoWillRespondToYou(threads):
     '''for every creator of the thread, this finds the people most likely to reply to you'''
@@ -83,9 +82,29 @@ def findUsagePatterns(everything):
     d={}
     return d
 
+
+'''((creator,message,peopleWhoLikedThePost,timeStamp,timeStampInSeconds,pictureURL,numberOfLikes))'''
 def processMessagesToThreads(everything,bufferTime):
     '''converts the list of messages to a list of threads according to a bufferTime'''
     output=[]
+    temp=[]
+    for i in range(len(everything)):
+        message=everything[i]
+        if str(message[0])=='GroupMe':
+            continue
+        #corner case
+        if i==0:
+            temp.append(message)
+            continue
+        previousMessage=everything[i-1]
+        if len(temp)==0:
+            temp.append(message)
+            continue
+        if message[4]-previousMessage[4]<bufferTime:
+            temp.append(message)
+        else:
+            output.append(temp)
+            temp=[]
     return  output
 
 
@@ -132,6 +151,9 @@ for eachMessage in data:
     everything.append((creator,message,peopleWhoLikedThePost,timeStamp,timeStampInSeconds,pictureURL,numberOfLikes))
 json_data.close()
 
+'''
+===============================================================================================
+'''
 print "These are the names of all the members."
 print allMembers
 print "This is the number of members.",len(allMembers)
@@ -173,7 +195,9 @@ processedMostLikes = processMostLikes(mostLikes)
 print "This is the list of creators, number of likes per messages, and number of messages sent"
 print processedMostLikes
 
-print everything
+threads= processMessagesToThreads(everything, 12000)
+for each in threads:
+    print each
 
 
 if __name__ == '__main__':
