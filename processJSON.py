@@ -161,7 +161,7 @@ def processDictResponseTime(dictResponseTime):
 def createIndex(someMembersList):
     lengthOfArray = len(someMembersList)
     sortedlist = sorted(someMembersList)
-    matrix = numpy.zeros(shape=(lengthOfArray,lengthOfArray))
+    matrix = [[0 for x in range(len(someMembersList))] for x in range(len(someMembersList))]
     indexDict = {}
     for i in range(len(sortedlist)):
         if someMembersList[i] not in indexDict:
@@ -170,16 +170,21 @@ def createIndex(someMembersList):
         
     return matrix,indexDict
 
-def populateMatrix(matrix,d):
+def populateMatrix(matrix,threads):
     '''this is still not working
     =====================================================================================+++++++++++++++++++++++++++++++++
     '''
-    for creator,val in d.iteritems():
-        creatorIndex = indexDictionary[str(creator)]     
-        for respondent,listOfTImes in val.iteritems():
-            respondentIndex = indexDictionary[respondent]
-            print "\t",creator,respondent
-            matrix[creatorIndex][respondentIndex]+=1
+    for thread in threads:
+        creator = thread[0][0]
+        for i in range(len(thread)):
+            if i==0: continue
+            lastPerson = thread[i][0]
+            lastPersonIndex = indexDictionary[lastPerson]
+            for j in range(0,i):
+                tempPerson = thread[j][0]
+                tempPersonIndex = indexDictionary[tempPerson]
+                matrix[lastPersonIndex][tempPersonIndex]+=1
+            
 
 '''variables'''
 allTheTimeStamps=[]#collects all the timestamps
@@ -289,7 +294,7 @@ print "\nThis shows the usage patterns per day / per hour"
 print usagePatternsPerDay
 print sorted(usagePatternsPerHour.iteritems(),key=operator.itemgetter(0))
 
-print "\nThis shows the threads"
+# print "\nThis shows the threads"
 threads= processMessagesToThreads(everything, 7200) #set limit as 2 hours
 # for each in threads:
 #     print each
@@ -302,8 +307,8 @@ participationRate,dictResponseTime=findParticipationRateInThreads(threads)
 processedParticipationRate = sorted([(k,1.0*val/totalNumberOfThreads,val) for k,val in participationRate.iteritems()],key=operator.itemgetter(0))
 print processedParticipationRate
 
-print "===================================================="
-print participationRate
+# print "===================================================="
+# print participationRate
 
 print "\nThis shows the response rate of the participants."
 # print dictResponseTime
@@ -315,8 +320,12 @@ matrix,indexDictionary = createIndex(allMembers)
 # print sorted(allMembers)
 # print sorted(indexDictionary.iteritems(),key=operator.itemgetter(0))
 populateMatrix(matrix,threads)
-for row in matrix:
-    print row
+print"\nThis is the matrix."
+print matrix
+# print [x for x in indexDictionary.iteritems()]
+print "\nThis is the matrix by rows"
+# for i,row in enumerate(matrix):
+#     print row
 # print [(x,y) for x,y in indexDictionary.iteritems()]
 
 if __name__ == '__main__':
