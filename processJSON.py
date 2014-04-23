@@ -60,16 +60,6 @@ def processMostLikes(d):
         lst.append((creator,(1.0*countLikesTup[1]/countLikesTup[0]),countLikesTup[0]))
     return sorted(lst,key=operator.itemgetter(1),reverse=True)
 
-def findResponseTimeOfEachPerson(threads):
-    
-    '''find how the time for each person to reply to messages
-    ignores sequential messages
-    finds participation rate in threads
-    '''
-    d={}            
-    return d
-
-
 '''((creator,message,peopleWhoLikedThePost,timeStamp,timeStampInSeconds,pictureURL,numberOfLikes))'''
 def findParticipationRateInThreads(threads):
     '''find the rate of participation of all the members in threads
@@ -122,6 +112,37 @@ def findUsagePatternsPerHour(timeStamp):
         usagePatternsPerHour[hour]=0
     usagePatternsPerHour[hour]+=1
     
+def radarChartInfo(everything):
+    '''((creator,message,peopleWhoLikedThePost,timeStamp,timeStampInSeconds,pictureURL,numberOfLikes))'''
+    i=1
+    ans={}
+    temp=[0,0,0,0,0,0,0]
+    timeStampInSeconds=everything[0][4]
+    while (i<len(everything)):
+        currentSeconds=everything[i][4]
+        message=everything[i]
+        time = message[3]
+        timeSplit=time.split(" ")
+        dayOfWeek = timeSplit[0]
+        month=month_dict[timeSplit[1]]
+        date=timeSplit[4]+" "+str(month)+" "+timeSplit[2]
+        if currentSeconds - timeStampInSeconds >604800:
+            timeStampInSeconds=currentSeconds
+            if date not in ans:
+                ans[date]=[temp]
+            temp=[0,0,0,0,0,0,0]
+        if dayOfWeek == 'Mon':temp[0]+=1
+        elif dayOfWeek == 'Tue':temp[1]+=1
+        elif dayOfWeek == 'Wed':temp[2]+=1
+        elif dayOfWeek == 'Thu':temp[3]+=1
+        elif dayOfWeek == 'Fri':temp[4]+=1
+        elif dayOfWeek == 'Sat':temp[5]+=1
+        elif dayOfWeek == 'Sun':temp[6]+=1
+        i+=1
+    return ans
+    
+    '''---------------------------------------------------------------------------------------------------------------------------'''
+    
 '''((creator,message,peopleWhoLikedThePost,timeStamp,timeStampInSeconds,pictureURL,numberOfLikes))'''
 def processMessagesToThreads(everything,bufferTime):
     '''converts the list of messages to a list of threads according to a bufferTime'''
@@ -159,7 +180,6 @@ def processDictResponseTime(dictResponseTime):
             print "\t",respondent,"has responded to",100.0*len(listOfTimes)/numThreadsCreated,"percent of the threads at an average of","{:.2f}".format(numpy.mean(listOfTimes)/60),"minutes"
 
 def createIndex(someMembersList):
-    lengthOfArray = len(someMembersList)
     sortedlist = sorted(someMembersList)
     matrix = [[0 for x in range(len(someMembersList))] for x in range(len(someMembersList))]
     indexDict = {}
@@ -180,7 +200,7 @@ def populateMatrix(matrix,threads):
             if i==0: continue
             lastPerson = thread[i][0]
             lastPersonIndex = indexDictionary[lastPerson]
-            for j in range(0,i):
+            for j in range(0 if i<4 else i-3,i):
                 tempPerson = thread[j][0]
                 tempPersonIndex = indexDictionary[tempPerson]
                 matrix[lastPersonIndex][tempPersonIndex]+=1
@@ -314,8 +334,6 @@ print "\nThis shows the response rate of the participants."
 # print dictResponseTime
 processedDictResponseTime = processDictResponseTime(dictResponseTime)
 
-
-
 matrix,indexDictionary = createIndex(allMembers)
 # print sorted(allMembers)
 # print sorted(indexDictionary.iteritems(),key=operator.itemgetter(0))
@@ -327,6 +345,10 @@ print "\nThis is the matrix by rows"
 # for i,row in enumerate(matrix):
 #     print row
 # print [(x,y) for x,y in indexDictionary.iteritems()]
+print "\nThis is the info for the radar chart"
+radarChart = radarChartInfo(everything)
+print radarChart
+
 
 if __name__ == '__main__':
     pass
