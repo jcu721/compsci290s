@@ -4,7 +4,7 @@
 <script src="JaneD3.js"></script>
 <script type="text/javascript" src="jquery.tipsy.js"></script>
 
-<link src="tipsy.css" rel="stylesheet" type="text/css" />
+<link href="tipsy.css" rel="stylesheet" type="text/css" />
 
 <style>
 
@@ -52,28 +52,31 @@ text {
 
 // http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
 var links = [
-{"source": "Ramy", "target": "Frank", "type": 1, "comment": "blob"},
-{"source": "Frank", "target": "Julian", "type": 1, "comment": "friends"},
-{"source": "Ramy", "target": "Julian", "type": 1, "comment": "friends"},
-{"source": "Jess", "target": "Brittany", "type": 1, "comment": "friends"},
-{"source": "Julian", "target": "Jess", "type": 3, "comment": "friends"},
-{"source": "Julian", "target": "Autri", "type": 3, "comment": "friends"},
-{"source": "Jess", "target": "Ramy", "type": 3, "comment": "friends"},
-{"source": "Autri", "target": "Ramy", "type": 3, "comment": "friends"},
-{"source": "Julian", "target": "Ramy", "type": 3, "comment": "friends"},
-{"source": "Jess", "target": "Autri", "type": 3, "comment": "friends"},
-{"source": "Autri", "target": "Hong", "type": 1, "comment": "friends"},
-{"source": "Autri", "target": "Susanna", "type": 1, "comment": "friends"},
+{"source": "Ramy", "target": "Frank", "type": 1, "comment": "Randolf Dorm"},
+{"source": "Frank", "target": "Julian", "type": 1, "comment": "Randolf Dorm"},
+{"source": "Ramy", "target": "Julian", "type": 1, "comment": "Randolf Dorm"},
+{"source": "Jess", "target": "Brittany", "type": 1, "comment": "Blackwell Dorm"},
+{"source": "Julian", "target": "Jess", "type": 3, "comment": "DIRA"},
+{"source": "Julian", "target": "Autri", "type": 3, "comment": "DIRA"},
+{"source": "Jess", "target": "Ramy", "type": 3, "comment": "DIRA"},
+{"source": "Autri", "target": "Ramy", "type": 3, "comment": "DIRA"},
+{"source": "Julian", "target": "Ramy", "type": 3, "comment": "DIRA"},
+{"source": "Jess", "target": "Autri", "type": 3, "comment": "DIRA"},
+{"source": "Autri", "target": "Hong", "type": 1, "comment": "Southgate"},
+{"source": "Autri", "target": "Susanna", "type": 1, "comment": "Southgate"},
 // {"source": "Autri", "target": "Justin", "type": 2},
-{"source": "Autri", "target": "Wally", "type": 2, "comment": "friends"},
-{"source": "Autri", "target": "Brian", "type": 2, "comment": "friends"},
-{"source": "Hong", "target": "Susanna", "type": 1, "comment": "friends"},
-{"source": "Susanna", "target": "Jane", "type": 2, "comment": "friends"},
-{"source": "Jane", "target": "Justin", "type": 1, "comment": "friends"},
-{"source": "Jane", "target": "Sachin", "type": 1, "comment": "friends"},
-{"source": "Sachin", "target": "Justin", "type": 1, "comment": "friends"},
-{"source": "Sachin", "target": "Fred", "type": 4, "comment": "friends"},
-{"source": "Brian", "target": "Wally", "type": 2, "comment": "friends"},
+{"source": "Autri", "target": "Wally", "type": 2, "comment": "AMI: Politics and Film"},
+{"source": "Autri", "target": "Brian", "type": 2, "comment": "AMI: Politics and Film"},
+{"source": "Hong", "target": "Susanna", "type": 1, "comment": "Southgate"},
+{"source": "Susanna", "target": "Jane", "type": 2, "comment": "Mechanical Engineering"},
+{"source": "Jane", "target": "Justin", "type": 2, "comment": "Focus"},
+{"source": "Jane", "target": "Sachin", "type": 2, "comment": "Focus"},
+{"source": "Sachin", "target": "Justin", "type": 2, "comment": "Focus"},
+{"source": "Jane", "target": "Justin", "type": 1, "comment": "Jarvis"},
+{"source": "Jane", "target": "Sachin", "type": 1, "comment": "Jarvis"},
+{"source": "Sachin", "target": "Justin", "type": 1, "comment": "Jarvis"},
+{"source": "Sachin", "target": "Fred", "type": 4, "comment": "O-week"},
+{"source": "Brian", "target": "Wally", "type": 2, "comment": "AMI: Politics and Film"}
 // {"source": "Justin", "target": "Wally", "type": 2}
 ];
 
@@ -118,7 +121,7 @@ var classNames = ["dorm", "class", "dira"];
 
 var link = svg.selectAll(".link")
     .data(force.links())
-  .enter().append("line")
+  .enter().append("svg:line")
     .attr("class", function(d) { return "link " + d.type})
     .attr("data-legend",function(d) { return d.type})
     .attr("title", function(d) {return d.comment})
@@ -326,17 +329,22 @@ legend = svg.append("g")
     // .attr("data-style-padding",10)
     .call(d3.legend)
 
+// svg.selectAll("link")
+//     .enter().append("svg:circle")
+
 $('svg .link').tipsy({ 
         gravity: 'w', 
         html: true, 
-        title: function(d) {
+        title: function() {
           // var c = d.comment;
-          return 'Hi there! ' 
-          // + c + '</span>'
-          ; 
+          var d = this.__data__;
+          var c = d.comment;
+          return ' ' + c + '</span>'; 
         }
       });
 
+// title: function() {
+          // var d = this.__data__, c = colors(d.i);
 
 </script>
 
