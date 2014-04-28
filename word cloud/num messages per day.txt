@@ -1,0 +1,3 @@
+Number of messages per day
+
+'Wed': 243, 'Sun': 239, 'Thu': 274, 'Tue': 166, 'Mon': 147, 'Fri': 462, 'Sat': 420

@@ -4,6 +4,11 @@ Created on Apr 11, 2014
 @author: The Oracle
 '''
 import json, time, operator, nltk, numpy
+import parseExcel
+
+calendarOfEvents=parseExcel.createDict()
+# print calendarOfEvents
+
 
 month_dict = {"Jan":1,"Feb":2,"Mar":3,"Apr":4, "May":5, "Jun":6,
        "Jul":7,"Aug":8,"Sep":9,"Oct":10,"Nov":11,"Dec":12}
@@ -102,6 +107,7 @@ def findUsagePatternsPerDay(eachMessage):
     '''finds the usage per day ie how many messages on Sunday compared to Monday
     finds usage patterns during certain times of the day'''
     day=convertToTime(eachMessage[u'created_at']).split(" ")[0]
+
     if day not in usagePatternsPerDay:
         usagePatternsPerDay[day]=0
     usagePatternsPerDay[day]+=1
@@ -205,7 +211,17 @@ def populateMatrix(matrix,threads):
                 tempPersonIndex = indexDictionary[tempPerson]
                 matrix[lastPersonIndex][tempPersonIndex]+=1
             
-
+def formatVariables():
+    for i in range(len(sortedMessagesPerDayByDay)):
+        temp=sortedMessagesPerDayByDay[i][0]
+        date=str(temp).replace("-", "/")
+        messagesperday=sortedMessagesPerDayByDay[i][1]
+        sendersperday = len(sortedSendersPerDay[i][1])
+        if temp in calendarOfEvents:
+            comment=calendarOfEvents[temp]
+        else:
+            comment="Nil"
+        print date+", "+str(messagesperday)+", "+str(sendersperday)+", "+comment
 '''variables'''
 allTheTimeStamps=[]#collects all the timestamps
 allTheTimeStampsInSeconds=[]    
@@ -216,6 +232,8 @@ everything=[]
 wordCloudDict={}
 usagePatternsPerDay={}
 usagePatternsPerHour={}
+sendersPerDay={}
+messagesByDay={}
 '''
 ===============================================================================================
 '''
@@ -225,7 +243,10 @@ for eachMessage in data:
     
     #timestamps
     timeStamp = convertToTime(eachMessage[u'created_at'])
-
+    pictureURL = eachMessage[u'picture_url']
+    message =  eachMessage[u'text']
+    creator = eachMessage[u'name']
+    
     #manipulating day
     findUsagePatternsPerDay(eachMessage)
     findUsagePatternsPerHour(timeStamp)
@@ -241,9 +262,16 @@ for eachMessage in data:
     if yearMonthDay not in messagesPerDay:
         messagesPerDay[yearMonthDay]=0
     messagesPerDay[yearMonthDay]+=1
-    pictureURL = eachMessage[u'picture_url']
-    message =  eachMessage[u'text']
     
+    #messagesByDay
+    if yearMonthDay not in messagesByDay:
+        messagesByDay[yearMonthDay]=[]
+    messagesByDay[yearMonthDay].append(message)  
+
+    #senders perday
+    if yearMonthDay not in sendersPerDay:
+        sendersPerDay[yearMonthDay]=[]
+    sendersPerDay[yearMonthDay].append(creator)
     #uses nltk tokenizer REQUIRES NLTK MODULE
     tokens=nltk.word_tokenize(str(message))
     for token in tokens:
@@ -252,7 +280,7 @@ for eachMessage in data:
         wordCloudDict[token]+=1
     
     
-    creator = eachMessage[u'name']
+    
     if str(creator) not in allMembers:
         allMembers.append(str(creator))
     if str(creator) not in messageCount:
@@ -273,6 +301,8 @@ print "This is the number of members.",len(allMembers)
 print "\nThis is the sorted list of members - message count."
 sortedMessageCount = sorted(messageCount.iteritems(),key=operator.itemgetter(1),reverse=True)
 print sortedMessageCount
+for each in sortedMessageCount:
+    print each[0]+": "+str(each[1])
 
 '''
 print "This is the list of all time stamps."
@@ -280,10 +310,12 @@ print allTheTimeStamps
 print allTheTimeStampsInSeconds
 '''
 
-# print "This is the sorted list of messages per day"
+print "This is the sorted list of messages per day"
 # sortedMessagesPerDayByCount = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(1),reverse=True)
-# sortedMessagesPerDayByDay = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(0))
-# print sortedMessagesPerDayByDay
+sortedMessagesPerDayByDay = sorted(messagesPerDay.iteritems(),key=operator.itemgetter(0))
+sortedSendersPerDay = sorted(sendersPerDay.iteritems(),key=operator.itemgetter(0))
+print sortedMessagesPerDayByDay
+print sortedSendersPerDay
 # print sortedMessagesPerDayByCount
 
 responseResult= responseRate(everything,120)[0]
@@ -310,6 +342,16 @@ sortedWordCloudDict = sorted(wordCloudDict.iteritems(),key=operator.itemgetter(1
 print "\nThis is a list of word / frequency -->use for word cloud."
 print sortedWordCloudDict
 
+'''--------------------------------------------------this prints the word cloud
+for tupz in sortedWordCloudDict:
+    i=0
+    val=tupz[1]
+    key=tupz[0]
+    while i<val:
+        print key
+        i+=1
+-------------------------------------------------------------------------------'''
+# '''---------------------------------------------------------------------------------------
 print "\nThis shows the usage patterns per day / per hour"
 print usagePatternsPerDay
 print sorted(usagePatternsPerHour.iteritems(),key=operator.itemgetter(0))
@@ -348,7 +390,17 @@ print "\nThis is the matrix by rows"
 print "\nThis is the info for the radar chart"
 radarChart = radarChartInfo(everything)
 print radarChart
+# --------------------------------------------------------------------------------------------------'''
+print "\nThis prints all the messages for a particular day"
+'''
+sortedMessagesByDay= sorted(messagesByDay.iteritems())
+for day in sortedMessagesByDay:
+    print "----------------"+day[0]
+    for message in day[1]:
+        print message
+'''
 
-
+# print "\nThis prints the calendar"
+# formatVariables()
 if __name__ == '__main__':
     pass
