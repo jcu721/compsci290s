@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+
+<!--  to do: increase size of link mouseover ability
+             mouseover legend text
+             change orientation of tooltip 
+             highlight links when you mouseover a person's name
+             show two different links simultaneously 
+             button to toggle 2012 data-->
+
 <meta charset="utf-8">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.js"></script>
 <script src="JaneD3.js"></script>
@@ -12,6 +20,7 @@
   fill: none;
   stroke: #666;
   stroke-width: 1.5px;
+
 }
 
 .link.dorm {
@@ -23,10 +32,12 @@
 .link.dira {
   stroke: #f03b20;
 }
-.link.other{
+.link.block{
   stroke:#dd4477;
 }
-
+.link.other{
+  stroke:#22aa99;
+}
 .node circle {
   fill: #7fcdbb;
   stroke: #fff;
@@ -47,25 +58,37 @@ text {
 
 </style>
 <body>
+  <!-- <button>Toggle Sophomore Year Data</button> -->
 <script>
 
 
 // http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
 var links = [
-{"source": "Ramy", "target": "Frank", "type": 1, "comment": "Randolf Dorm"},
-{"source": "Frank", "target": "Julian", "type": 1, "comment": "Randolf Dorm"},
-{"source": "Ramy", "target": "Julian", "type": 1, "comment": "Randolf Dorm"},
-{"source": "Jess", "target": "Brittany", "type": 1, "comment": "Blackwell Dorm"},
+{"source": "Autri", "target": "Hong", "type": 1, "comment": "Southgate"},
+{"source": "Jess", "target": "Ramy", "type": 3, "comment": "DIRA"},
+{"source": "Autri", "target": "Wally", "type": 2, "comment": "AMI: Politics and Film"},
+{"source": "Sachin", "target": "Fred", "type": 5, "comment": "O-week"},
+    {"source": "Ramy", "target": "Frank", "type": 4, "comment": "Edens"},
+    {"source": "Frank", "target": "Julian", "type": 4, "comment": "Edens"},
+    {"source": "Ramy", "target": "Julian", "type": 4, "comment": "Edens"},
+    {"source": "Jess", "target": "Brittany", "type": 4, "comment": "Craven"},
+    {"source": "Autri", "target": "Justin", "type": 4, "comment": "Crowell EE"},
+    {"source": "Hong", "target": "Susanna", "type": 4, "comment": "Kilgo"},
+    {"source": "Sachin", "target": "Justin", "type": 4, "comment": "Crowell EE"},
+    {"source": "Sachin", "target": "Autri", "type": 4, "comment": "Crowell EE"},
+    {"source": "Sachin", "target": "Fred", "type": 4, "comment": "Crowell EE"},
+    {"source": "Justin", "target": "Fred", "type": 4, "comment": "Crowell EE"},
+    {"source": "Autri", "target": "Fred", "type": 4, "comment": "Crowell EE"}, 
+{"source": "Ramy", "target": "Frank", "type": 1, "comment": "Randolph"},
+{"source": "Frank", "target": "Julian", "type": 1, "comment": "Randolph"},
+{"source": "Ramy", "target": "Julian", "type": 1, "comment": "Randolph"},
+{"source": "Jess", "target": "Brittany", "type": 1, "comment": "Blackwell"},
 {"source": "Julian", "target": "Jess", "type": 3, "comment": "DIRA"},
 {"source": "Julian", "target": "Autri", "type": 3, "comment": "DIRA"},
-{"source": "Jess", "target": "Ramy", "type": 3, "comment": "DIRA"},
 {"source": "Autri", "target": "Ramy", "type": 3, "comment": "DIRA"},
 {"source": "Julian", "target": "Ramy", "type": 3, "comment": "DIRA"},
 {"source": "Jess", "target": "Autri", "type": 3, "comment": "DIRA"},
-{"source": "Autri", "target": "Hong", "type": 1, "comment": "Southgate"},
 {"source": "Autri", "target": "Susanna", "type": 1, "comment": "Southgate"},
-// {"source": "Autri", "target": "Justin", "type": 2},
-{"source": "Autri", "target": "Wally", "type": 2, "comment": "AMI: Politics and Film"},
 {"source": "Autri", "target": "Brian", "type": 2, "comment": "AMI: Politics and Film"},
 {"source": "Hong", "target": "Susanna", "type": 1, "comment": "Southgate"},
 {"source": "Susanna", "target": "Jane", "type": 2, "comment": "Mechanical Engineering"},
@@ -75,9 +98,8 @@ var links = [
 {"source": "Jane", "target": "Justin", "type": 1, "comment": "Jarvis"},
 {"source": "Jane", "target": "Sachin", "type": 1, "comment": "Jarvis"},
 {"source": "Sachin", "target": "Justin", "type": 1, "comment": "Jarvis"},
-{"source": "Sachin", "target": "Fred", "type": 4, "comment": "O-week"},
 {"source": "Brian", "target": "Wally", "type": 2, "comment": "AMI: Politics and Film"}
-// {"source": "Justin", "target": "Wally", "type": 2}
+
 ];
 
 var nodes = [];
@@ -95,12 +117,15 @@ links.forEach(function(link) {
     link.type = "class";
   } else if ((link.type) == 3) {
     link.type = "dira";
-  } else if ((link.type) == 4) {
+  } else if ((link.type) == 5) {
     link.type = "other";
+  } 
+  else if ((link.type) == 4) {
+    link.type = "block";
   } 
 });
 
-var width = 760,
+var width = 850,
     height = 600;
 
 var force = d3.layout.force()
@@ -123,7 +148,17 @@ var link = svg.selectAll(".link")
     .data(force.links())
   .enter().append("svg:line")
     .attr("class", function(d) { return "link " + d.type})
-    .attr("data-legend",function(d) { return d.type})
+    .attr("data-legend",function(d) { 
+      if (d.type == "dorm"){
+        return "freshman dorm";
+      }
+      if (d.type == "block"){
+        return "sophomore block";
+      }
+      if (d.type == "dira"){
+        return "DIRA";
+      }
+      else return d.type})
     .attr("title", function(d) {return d.comment})
 
     .on("mouseover", function(d) {d3.select(this)
@@ -239,7 +274,7 @@ d3.legend = function(g) {
         .data(items,function(d) { return d.key})
         .call(function(d) { d.enter().append("text")})
         .call(function(d) { d.exit().remove()})
-        .attr("y",function(d,i) { return 2*i + "2px"})
+        .attr("y",function(d,i) { return 22*i })
         .attr("x","1em")
         .on("mouseover", function(d, i) {
         if (i == 0) {
@@ -290,6 +325,9 @@ d3.legend = function(g) {
         else if (i == 3) {
           svg.selectAll(".link" + ".other").style("stroke-width", "3.5px");
         }
+        else if (i == 4) {
+          svg.selectAll(".link" + ".block").style("stroke-width", "3.5px");
+        }
         })
         .on("mouseout", function(d, i) {
         if (i == 0) {
@@ -303,6 +341,9 @@ d3.legend = function(g) {
         }
         else if (i == 3) {
           svg.selectAll(".link" + ".other").style("stroke-width", "1.5px");
+        }
+        else if (i == 4) {
+          svg.selectAll(".link" + ".block").style("stroke-width", "1.5px");
         }
         })  
         .style("fill",function(d) { console.log(d.value.color);
@@ -321,9 +362,11 @@ d3.legend = function(g) {
 }
 })()
 
+
+
 legend = svg.append("g")
     .attr("class","legend")
-    .attr("transform","translate(650,150)")
+    .attr("transform","translate(700,150)")
     .style("font-size","22px")
     //.style("font", "20px sans-serif")
     // .attr("data-style-padding",10)
@@ -346,9 +389,11 @@ $('svg .link').tipsy({
 // title: function() {
           // var d = this.__data__, c = colors(d.i);
 
+// d3.select('button').on('click', 2011Data.js;
+
+
 </script>
 
-<body>
-  
+
 </body>
 
