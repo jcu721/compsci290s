@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.js"></script>
 <script src="JaneD3.js"></script>
+<script type="text/javascript" src="jquery.tipsy.js"></script>
+
+<link src="tipsy.css" rel="stylesheet" type="text/css" />
 
 <style>
 
@@ -18,6 +22,9 @@
 }
 .link.dira {
   stroke: #f03b20;
+}
+.link.other{
+  stroke:#dd4477;
 }
 
 .node circle {
@@ -37,6 +44,7 @@ text {
   opacity:0.8;
 }
 
+
 </style>
 <body>
 <script>
@@ -44,26 +52,29 @@ text {
 
 // http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
 var links = [
-{"source": "Ramy", "target": "Frank", "type": 1},
-{"source": "Frank", "target": "Julian", "type": 1},
-{"source": "Ramy", "target": "Julian", "type": 1},
-{"source": "Jess", "target": "Brittany", "type": 1},
-{"source": "Julian", "target": "Jess", "type": 3},
-{"source": "Julian", "target": "Autri", "type": 3},
-{"source": "Jess", "target": "Autri", "type": 3},
-{"source": "Autri", "target": "Hong", "type": 1},
-{"source": "Autri", "target": "Susanna", "type": 1},
-{"source": "Autri", "target": "Justin", "type": 2},
-{"source": "Autri", "target": "Wally", "type": 2},
-{"source": "Autri", "target": "Brian", "type": 2},
-{"source": "Hong", "target": "Susanna", "type": 1},
-{"source": "Susanna", "target": "Jane", "type": 2},
-{"source": "Jane", "target": "Justin", "type": 1},
-{"source": "Jane", "target": "Sachin", "type": 1},
-{"source": "Sachin", "target": "Justin", "type": 1},
-{"source": "Sachin", "target": "Fred", "type": 1},
-{"source": "Brian", "target": "Wally", "type": 2},
-{"source": "Justin", "target": "Wally", "type": 2}
+{"source": "Ramy", "target": "Frank", "type": 1, "comment": "blob"},
+{"source": "Frank", "target": "Julian", "type": 1, "comment": "friends"},
+{"source": "Ramy", "target": "Julian", "type": 1, "comment": "friends"},
+{"source": "Jess", "target": "Brittany", "type": 1, "comment": "friends"},
+{"source": "Julian", "target": "Jess", "type": 3, "comment": "friends"},
+{"source": "Julian", "target": "Autri", "type": 3, "comment": "friends"},
+{"source": "Jess", "target": "Ramy", "type": 3, "comment": "friends"},
+{"source": "Autri", "target": "Ramy", "type": 3, "comment": "friends"},
+{"source": "Julian", "target": "Ramy", "type": 3, "comment": "friends"},
+{"source": "Jess", "target": "Autri", "type": 3, "comment": "friends"},
+{"source": "Autri", "target": "Hong", "type": 1, "comment": "friends"},
+{"source": "Autri", "target": "Susanna", "type": 1, "comment": "friends"},
+// {"source": "Autri", "target": "Justin", "type": 2},
+{"source": "Autri", "target": "Wally", "type": 2, "comment": "friends"},
+{"source": "Autri", "target": "Brian", "type": 2, "comment": "friends"},
+{"source": "Hong", "target": "Susanna", "type": 1, "comment": "friends"},
+{"source": "Susanna", "target": "Jane", "type": 2, "comment": "friends"},
+{"source": "Jane", "target": "Justin", "type": 1, "comment": "friends"},
+{"source": "Jane", "target": "Sachin", "type": 1, "comment": "friends"},
+{"source": "Sachin", "target": "Justin", "type": 1, "comment": "friends"},
+{"source": "Sachin", "target": "Fred", "type": 4, "comment": "friends"},
+{"source": "Brian", "target": "Wally", "type": 2, "comment": "friends"},
+// {"source": "Justin", "target": "Wally", "type": 2}
 ];
 
 var nodes = [];
@@ -81,6 +92,8 @@ links.forEach(function(link) {
     link.type = "class";
   } else if ((link.type) == 3) {
     link.type = "dira";
+  } else if ((link.type) == 4) {
+    link.type = "other";
   } 
 });
 
@@ -100,13 +113,27 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
+
+var classNames = ["dorm", "class", "dira"];
+
 var link = svg.selectAll(".link")
     .data(force.links())
   .enter().append("line")
-    .attr("class", function(d) { return "link " + d.type; })
+    .attr("class", function(d) { return "link " + d.type})
     .attr("data-legend",function(d) { return d.type})
-    .on("mouseover", mouseover1)
-    .on("mouseout", mouseout1);
+    .attr("title", function(d) {return d.comment})
+
+    .on("mouseover", function(d) {d3.select(this)
+      .style("stroke-width", "3.5px")})
+    // .on("mouseover", tip.show) 
+      
+      
+    .on("mouseout", function(d) {
+      // tip.hide;
+      d3.select(this)
+      .style("stroke-width", "1.5px");
+    });
+
 
 var node = svg.selectAll(".node")
     .data(force.nodes())
@@ -141,25 +168,21 @@ function mouseover() {
       .attr("r", 18);
   d3.select(this).select("text").transition()
       .duration(550)
-      .attr("x", 20)
+      .attr("x", 19)
       // .style("stroke", "lightsteelblue")
       // .style("stroke-width", ".5px")
       .style("font", "15px sans-serif");
-  var x = d3.selectAll(".link")
-    if (x.source === this.name){
-      x.transition().duration(550).style("stroke-width", "3.5px");
-    }
-  if (d3.select(this).select("text") == "Justin"){
-    d3.select(this).select("text").transition()
-      .duration(550)
-      .attr("x", 30);
-    }
-  }
 
-function mouseover1(){
-  d3.select(this)
-  .style("stroke-width", "3.5px");
-}
+  // var x = d3.selectAll(".link")
+  //   if (x.source === this.name){
+  //     x.transition().duration(550).style("stroke-width", "3.5px");
+  //   }
+  // if (d3.select(this).select("text") == "Justin"){
+  //   d3.select(this).select("text").transition()
+  //     .duration(550)
+  //     .attr("x", 30);
+  //   }
+  }
 
 function mouseout() {
   d3.select(this).select("circle").transition()
@@ -176,16 +199,13 @@ function mouseout() {
     .style("stroke-width", "1.5px");
   }
 
-function mouseout1(){
-  d3.select(this)
-  .style("stroke-width", "1.5px");
-}
-
-var varNames = ["Class", "Same Freshman Dorm", "DIRA"];
 
 (function() {
 d3.legend = function(g) {
   g.each(function() {
+
+    var classNames = [".dorm", ".class", ".dira"];
+
     var g= d3.select(this),
         items = {},
         svg = d3.select(g.property("nearestViewportElement")),
@@ -216,12 +236,37 @@ d3.legend = function(g) {
         .data(items,function(d) { return d.key})
         .call(function(d) { d.enter().append("text")})
         .call(function(d) { d.exit().remove()})
-        .attr("y",function(d,i) { return i+"em"})
+        .attr("y",function(d,i) { return 2*i + "2px"})
         .attr("x","1em")
+        .on("mouseover", function(d, i) {
+        if (i == 0) {
+          svg.selectAll(".link" + ".dorm").style("stroke-width", "3.5px");
+        }
+        else if (i == 2) {
+          svg.selectAll(".link" + ".class").style("stroke-width", "3.5px");
+        }
+        else if (i == 1) {
+          svg.selectAll(".link" + ".dira").style("stroke-width", "3.5px");
+        }
+        })
+        .on("mouseout", function(d, i) {
+        if (i == 0) {
+          svg.selectAll(".link" + ".dorm").style("stroke-width", "1.5px");
+        }
+        else if (i == 2) {
+          svg.selectAll(".link" + ".class").style("stroke-width", "1.5px");
+        }
+        else if (i == 1) {
+          svg.selectAll(".link" + ".dira").style("stroke-width", "1.5px");
+        }
+
+        // why does this one not work but the other one does?!?
+
+        }) 
         .style("font", "16px sans-serif")
-        .style("margin-bottom","10px")
+        .style("line-height","2.0") 
         .text(function(d) { ;return d.key})
-    
+
     li.selectAll("circle")
         .data(items,function(d) { return d.key})
         .call(function(d) { d.enter().append("circle")})
@@ -229,7 +274,38 @@ d3.legend = function(g) {
         .attr("cy",function(d,i) { return i-0.25+"em"})
         .attr("cx",0)
         .attr("r","0.4em")
-        .style("fill",function(d) { console.log(d.value.color);return d.value.color})  
+        .on("mouseover", function(d, i) {
+        if (i == 0) {
+          svg.selectAll(".link" + ".dorm").style("stroke-width", "3.5px");
+        }
+        else if (i == 2) {
+          svg.selectAll(".link" + ".class").style("stroke-width", "3.5px");
+        }
+        else if (i == 1) {
+          svg.selectAll(".link" + ".dira").style("stroke-width", "3.5px");
+        }
+        else if (i == 3) {
+          svg.selectAll(".link" + ".other").style("stroke-width", "3.5px");
+        }
+        })
+        .on("mouseout", function(d, i) {
+        if (i == 0) {
+          svg.selectAll(".link" + ".dorm").style("stroke-width", "1.5px");
+        }
+        else if (i == 2) {
+          svg.selectAll(".link" + ".class").style("stroke-width", "1.5px");
+        }
+        else if (i == 1) {
+          svg.selectAll(".link" + ".dira").style("stroke-width", "1.5px");
+        }
+        else if (i == 3) {
+          svg.selectAll(".link" + ".other").style("stroke-width", "1.5px");
+        }
+        })  
+        .style("fill",function(d) { console.log(d.value.color);
+
+        return d.value.color})
+
     
     // Reposition and resize the blackoutline box
     // var lbbox = li[0][0].getBBox()  
@@ -245,9 +321,26 @@ d3.legend = function(g) {
 legend = svg.append("g")
     .attr("class","legend")
     .attr("transform","translate(650,150)")
-    //.style("font-size","12px")
+    .style("font-size","22px")
     //.style("font", "20px sans-serif")
     // .attr("data-style-padding",10)
     .call(d3.legend)
 
+$('svg .link').tipsy({ 
+        gravity: 'w', 
+        html: true, 
+        title: function(d) {
+          // var c = d.comment;
+          return 'Hi there! ' 
+          // + c + '</span>'
+          ; 
+        }
+      });
+
+
 </script>
+
+<body>
+  
+</body>
+
