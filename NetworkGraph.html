@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="JaneD3.js"></script>
+
+<style>
+
+.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+.link.dorm {
+  stroke: #756bb1;
+}
+.link.class {
+  stroke: #feb24c;
+}
+.link.dira {
+  stroke: #f03b20;
+}
+
+.node circle {
+  fill: #7fcdbb;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+text {
+  font: 12px sans-serif;
+  pointer-events: none;
+}
+
+.legend rect {
+  fill:white;
+  stroke:black;
+  opacity:0.8;
+}
+
+</style>
+<body>
+<script>
+
+
+// http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
+var links = [
+{"source": "Ramy", "target": "Frank", "type": 1},
+{"source": "Frank", "target": "Julian", "type": 1},
+{"source": "Ramy", "target": "Julian", "type": 1},
+{"source": "Jess", "target": "Brittany", "type": 1},
+{"source": "Julian", "target": "Jess", "type": 3},
+{"source": "Julian", "target": "Autri", "type": 3},
+{"source": "Jess", "target": "Autri", "type": 3},
+{"source": "Autri", "target": "Hong", "type": 1},
+{"source": "Autri", "target": "Susanna", "type": 1},
+{"source": "Autri", "target": "Justin", "type": 2},
+{"source": "Autri", "target": "Wally", "type": 2},
+{"source": "Autri", "target": "Brian", "type": 2},
+{"source": "Hong", "target": "Susanna", "type": 1},
+{"source": "Susanna", "target": "Jane", "type": 2},
+{"source": "Jane", "target": "Justin", "type": 1},
+{"source": "Jane", "target": "Sachin", "type": 1},
+{"source": "Sachin", "target": "Justin", "type": 1},
+{"source": "Sachin", "target": "Fred", "type": 1},
+{"source": "Brian", "target": "Wally", "type": 2},
+{"source": "Justin", "target": "Wally", "type": 2}
+];
+
+var nodes = [];
+
+// Compute the distinct nodes from the links.
+links.forEach(function(link) {
+  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+});
+
+links.forEach(function(link) {
+  if ((link.type) == 1) {
+    link.type = "dorm";
+  } else if ((link.type) == 2) {
+    link.type = "class";
+  } else if ((link.type) == 3) {
+    link.type = "dira";
+  } 
+});
+
+var width = 760,
+    height = 600;
+
+var force = d3.layout.force()
+    .nodes(d3.values(nodes))
+    .links(links)
+    .size([width, height])
+    .linkDistance(60)
+    .charge(-1000)
+    .on("tick", tick)
+    .start();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var link = svg.selectAll(".link")
+    .data(force.links())
+  .enter().append("line")
+    .attr("class", function(d) { return "link " + d.type; })
+    .attr("data-legend",function(d) { return d.type})
+    .on("mouseover", mouseover1)
+    .on("mouseout", mouseout1);
+
+var node = svg.selectAll(".node")
+    .data(force.nodes())
+  .enter().append("g")
+    .attr("class", "node")
+    .on("mouseover", mouseover)
+    .on("mouseout", mouseout)
+    .call(force.drag);
+
+node.append("circle")
+    .attr("r", 15);
+
+node.append("text")
+    .attr("x", 16)
+    .attr("dy", ".35em")
+    .text(function(d) { return d.name; });
+
+function tick() {
+  link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+function mouseover() {
+  d3.select(this).select("circle").transition()
+      .duration(550)
+      .attr("r", 18);
+  d3.select(this).select("text").transition()
+      .duration(550)
+      .attr("x", 20)
+      // .style("stroke", "lightsteelblue")
+      // .style("stroke-width", ".5px")
+      .style("font", "15px sans-serif");
+  var x = d3.selectAll(".link")
+    if (x.source === this.name){
+      x.transition().duration(550).style("stroke-width", "3.5px");
+    }
+  if (d3.select(this).select("text") == "Justin"){
+    d3.select(this).select("text").transition()
+      .duration(550)
+      .attr("x", 30);
+    }
+  }
+
+function mouseover1(){
+  d3.select(this)
+  .style("stroke-width", "3.5px");
+}
+
+function mouseout() {
+  d3.select(this).select("circle").transition()
+      .duration(550)
+      .attr("r", 15);
+  d3.select(this).select("text").transition()
+      .duration(750)
+      .attr("x", 16)
+      // .style("stroke", "lightsteelblue")
+      // .style("stroke-width", ".5px")
+      .style("font", "12px sans-serif");
+  d3.selectAll(".link")
+    .transition().duration(550)
+    .style("stroke-width", "1.5px");
+  }
+
+function mouseout1(){
+  d3.select(this)
+  .style("stroke-width", "1.5px");
+}
+
+var varNames = ["Class", "Same Freshman Dorm", "DIRA"];
+
+(function() {
+d3.legend = function(g) {
+  g.each(function() {
+    var g= d3.select(this),
+        items = {},
+        svg = d3.select(g.property("nearestViewportElement")),
+        legendPadding = g.attr("data-style-padding") || 5,
+        lb = g.selectAll(".legend-box").data([true]),
+        li = g.selectAll(".legend-items").data([true])
+
+    lb.enter().append("rect").classed("legend-box",true)
+    li.enter().append("g").classed("legend-items",true)
+
+    svg.selectAll("[data-legend]").each(function() {
+        var self = d3.select(this)
+        // .on("mouseover", mouseover2)
+        // .on("mouseout", mouseout2)
+        items[self.attr("data-legend")] = {
+          pos : self.attr("data-legend-pos") || this.getBBox().y,
+          color : self.attr("data-legend-color") != undefined ? 
+          self.attr("data-legend-color") : self.style("fill") 
+          != 'none' ? self.style("fill") : self.style("stroke") 
+        }
+
+      })
+
+    items = d3.entries(items).sort(function(a,b) { return a.value.pos-b.value.pos})
+
+    
+    li.selectAll("text")
+        .data(items,function(d) { return d.key})
+        .call(function(d) { d.enter().append("text")})
+        .call(function(d) { d.exit().remove()})
+        .attr("y",function(d,i) { return i+"em"})
+        .attr("x","1em")
+        .style("font", "16px sans-serif")
+        .style("margin-bottom","10px")
+        .text(function(d) { ;return d.key})
+    
+    li.selectAll("circle")
+        .data(items,function(d) { return d.key})
+        .call(function(d) { d.enter().append("circle")})
+        .call(function(d) { d.exit().remove()})
+        .attr("cy",function(d,i) { return i-0.25+"em"})
+        .attr("cx",0)
+        .attr("r","0.4em")
+        .style("fill",function(d) { console.log(d.value.color);return d.value.color})  
+    
+    // Reposition and resize the blackoutline box
+    // var lbbox = li[0][0].getBBox()  
+    // lb.attr("x",(lbbox.x-legendPadding + 600))
+    //     .attr("y",(lbbox.y-legendPadding + 50))
+    //     .attr("height",(lbbox.height+2*legendPadding))
+    //     .attr("width",(lbbox.width+3*legendPadding))
+  })
+  return g
+}
+})()
+
+legend = svg.append("g")
+    .attr("class","legend")
+    .attr("transform","translate(650,150)")
+    //.style("font-size","12px")
+    //.style("font", "20px sans-serif")
+    // .attr("data-style-padding",10)
+    .call(d3.legend)
+
+</script>
