@@ -121,35 +121,36 @@
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['Hour', 'Number of Messages'],
-          
-          ['05',1],
-          ['08',6],
-          ['09',22],
-          ['10',51],
-          ['11',69],
-          ['12',82],
-          ['13',84],
-          ['14',117],
-          ['15',101],
-          ['16',95],
-          ['17',137],
-          ['18',125],
-          ['19',158],
-          ['20',107],
-          ['21',185],
-          ['22',256],
-          ['23',145]
-          ['00',71],
-          ['01',92],
-          ['02',39],
-          ['03',6],
-          ['04',2],
+          ['5 am',1],
+          ['8 am',6],
+          ['9 am',22],
+          ['10 am',51],
+          ['11 am',69],
+          ['12 pm',82],
+          ['1 pm',84],
+          ['2 pm',117],
+          ['3 pm',101],
+          ['4 pm',95],
+          ['5 pm',137],
+          ['6 pm',125],
+          ['7 pm',158],
+          ['8 pm',107],
+          ['9 pm',185],
+          ['10 pm',256],
+          ['11 pm',145],
+          ['12 am',71],
+          ['1 am',92],
+          ['2 am',39],
+          ['3 am',6],
+          ['4 am',2],
         ]);
 
+      var options = {'title':'Number of Messages Sent Per Hour',
+                        'titleTextStyle': {'fontSize': 17.75},
+                       'width':700,
+                       'height':500};
         var chart = new google.visualization.BarChart(document.getElementById('chart_div2'));
-        chart.draw(data, 
-        { title: 'Text Messages by Hour', 
-          // chartArea: {width: '40%'}});
+        chart.draw(data, options);
       }
      </script>
     
