@@ -57,7 +57,7 @@
   color: #fff;
   height: 600px;
   margin: 0;
-  padding: 200px 0 260px 0;
+  padding: 200px 0 0px 0;
   background-size: cover;
 }
 
@@ -89,15 +89,37 @@ margin: 10px;
 padding: 0;
 }
 
+h3 {
+   font-family: "Arvo";
+   font-weight: normal;
+   font-size: 20px;
+   text-align: center;
+   margin: 5px 0;
+    padding: 0;
+    z-index: 1;
+    position: relative;
+}
 
+#SecondPic{
+  background-color: #1C1C1C;
+  opacity:.7;
+}
 
 #graphs{
   background-color: #fff;
   color: #333333;
-  height: 800px;
+  height: 1200px;
   margin: 0 auto;
   overflow: hidden;
-  padding: 200px 0;
+
   font-size: 17.75px;
 }
 
+#graphs2{
+  background-color: #fff;
+  color: #333333;
+  height: 200px;
+  margin-top: -100px;
+  overflow: hidden;
+  font-size: 17.75px;
+}
