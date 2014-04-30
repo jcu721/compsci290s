@@ -1,0 +1,211 @@
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the piechart package.
+      google.load('visualization', '1.0', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Category');
+        data.addColumn('number', 'Number of Messages Sent');
+        data.addRows([
+          ['Fri', 462],['Sat', 420],['Thu', 274],['Wed', 243],
+          ['Sun', 239],
+          ['Tue', 166],
+          ['Mon', 147],
+          
+          
+        ]);
+
+        // Set chart options
+        var options = {'title':'Number of Messages Sent Per Day',
+                        'titleTextStyle': {'fontSize': 17.75},
+                       'width':600,
+                       'height':380};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+
+      
+    </script>
+     <script type="text/javascript">
+
+    //   // Load the Visualization API and the piechart package.
+    //   google.load('visualization', '1.0', {'packages':['corechart']});
+
+    //   // Set a callback to run when the Google Visualization API is loaded.
+    //   google.setOnLoadCallback(drawChart);
+
+    //   // Callback that creates and populates a data table,
+    //   // instantiates the pie chart, passes in the data and
+    //   // draws it.
+    //   function drawChart() {
+
+    //       // Create the data table.
+    //       var data = new google.visualization.DataTable();
+    //       data.addColumn('string', 'Category');
+    //       data.addColumn('number', 'Hospitals');
+    //       data.addRows([
+    //         ['Wed', 256],['300-399', 2],
+    //         ['200-299', 2],['100-199', 3],
+    //         ['25-49', 2],
+    //       ]);
+
+    //       // Set chart options
+    //       var options = {'title':'Size of Hospitals by Number of Beds',
+    //                      'width':500,
+    //                      'height':300};
+
+    //       // Instantiate and draw our chart, passing in some options.
+    //       var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+    //       chart.draw(data, options);
+    //     }
+    //     </script>
+
+         <script type="text/javascript">
+    //   google.load("visualization", "1", {packages:["corechart"]});
+    //   google.setOnLoadCallback(drawChart);
+    //   function drawChart() {
+    //     var data = google.visualization.arrayToDataTable([
+    //       ['Hospital', 'Year'],
+    //       ['Oro Valley', "2005"],
+    //       ['Southcoast', "2003"],
+    //       ['Dell Children\'s', 2006],
+    //       ['University of Iowa', 1979],
+    //       ['Monadnock', 2012],
+    //       ['University of Wisconsin', 1979],
+    //       ['Mercy Hospital', 1989],
+    //       ['Matha\'s Vineyard', 2010],
+    //       ['Woodhull', 1983],
+    //       ['Children\'s Hospital of Pittsburg', 2007],
+    //       ['Georgetown Lombardi', 1990],
+    //       ['Kaiser Permanente', 2010],
+    //       ['Stony Brook', 2011],
+    //       ['Akron Children\'s', 1993],
+    //       ['Cleveland Clinic', 1964],
+    //       ['Hays Med', 1974]
+    //       ]);
+
+    //     var formatter = new google.visualization.NumberFormat(
+    //       { pattern: '####'});
+        
+    //     formatter.format(data, 1); 
+
+    //     var options = {
+    //       title: 'Date of Art Collection Establishment',
+    //       legend: { position: 'none' },
+    //       colors: ['#e7711c'],
+    //       histogram: { bucketSize: 3 }
+    //     };
+
+    //     var chart = new google.visualization.Histogram(document.getElementById('chart_div3'));
+    //     chart.draw(data, options);
+    //   }
+    // </script>
+     <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Hour', 'Number of Messages'],
+          ['5 am',1],
+          ['8 am',6],
+          ['9 am',22],
+          ['10 am',51],
+          ['11 am',69],
+          ['12 pm',82],
+          ['1 pm',84],
+          ['2 pm',117],
+          ['3 pm',101],
+          ['4 pm',95],
+          ['5 pm',137],
+          ['6 pm',125],
+          ['7 pm',158],
+          ['8 pm',107],
+          ['9 pm',185],
+          ['10 pm',256],
+          ['11 pm',145],
+          ['12 am',71],
+          ['1 am',92],
+          ['2 am',39],
+          ['3 am',6],
+          ['4 am',2],
+        ]);
+
+      var options = {'title':'Number of Messages Sent Per Hour',
+                        'titleTextStyle': {'fontSize': 17.75},
+                       'width':700,
+                       'height':500};
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div2'));
+        chart.draw(data, options);
+      }
+     </script>
+    
+         <script type="text/javascript">
+    //   google.load("visualization", "1", {packages:["corechart"]});
+    //   google.setOnLoadCallback(drawChart);
+    //   function drawChart() {
+    //     var data = google.visualization.arrayToDataTable([
+    //       ['Method', 'Number of Hospitals'],
+    //       ['Through Purchase', 13],
+    //       ['Through Commission', 12],
+    //       ['Through Donation', 10],
+    //       ['Through Loan', 2]
+    //     ]);
+
+    //     var chart = new google.visualization.BarChart(document.getElementById('chart_div5'));
+    //     chart.draw(data, 
+    //     { title: 'Methods of Acquiring Art', titleTextStyle: {fontSize: 14},
+    //       chartArea: {width: '40%'}});
+    //   }
+    // </script>
+     <script type="text/javascript">
+    //   google.load('visualization', '1.0', {'packages':['corechart']});
+    //   google.setOnLoadCallback(drawChart);
+
+    //   function drawChart() {
+    //       var data = new google.visualization.DataTable();
+    //       data.addColumn('string', 'Category');
+    //       data.addColumn('number', 'Hospitals');
+    //       data.addRows([
+    //         ['Purchase', 997],['Donation', 330],
+    //         ['Commission', 177], ['Loan', 96]
+    //       ]);
+
+    //       // Set chart options
+    //       var options = {'title':'Distribution of How Works are Acquired',titleTextStyle: {fontSize: 15},
+    //                      'width':500,
+    //                      'height':300};
+
+    //       // Instantiate and draw our chart, passing in some options.
+    //       var chart = new google.visualization.PieChart(document.getElementById('chart_div6'));
+    //       chart.draw(data, options);
+    //     }
+    //     </script>
+    
+  </head>
+
+  <body>
+    <!--Div that will hold the pie chart-->
+      <!-- <div id="chart_div"></div> -->
+      <div id="chart_div"></div>
+      <!-- <div id="chart_div5" style="width: 700px; height: 250px;"></div> -->
+      <!-- <div id="chart_div"></div> -->
+      <div id="chart_div2"></div> 
+      <!-- <div id="chart_div3"></div> -->
+
+  </body>
+</html>
