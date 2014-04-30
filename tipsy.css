@@ -24,3 +24,40 @@
     .tipsy-se .tipsy-arrow { bottom: 0; right: 10px; border-top-style: solid; border-bottom: none; border-left-color: transparent; border-right-color: transparent; }
   .tipsy-e .tipsy-arrow { right: 0; top: 50%; margin-top: -5px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
   .tipsy-w .tipsy-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
+
+
+.center { margin: 0 auto; }
+
+.content{ margin: 0 auto; width: 960px; }
+
+.clear { clear: both; }
+
+#slide1, #slide2{ width: 100%; }
+
+#slide1{
+  background:url('FoundersPic.jpg') 50% 0 no-repeat fixed;
+  color: #fff;
+  height: 600px;
+  margin: 0;
+  padding: 200px 0 260px 0;
+  background-size: cover;
+}
+
+#slide2{
+  background:url('HousePic.jpg') 50% 0 no-repeat fixed;
+  color: #fff;
+  height: 600px;
+  margin: 0;
+  padding: 200px 0 260px 0;
+  background-size: cover;
+}
+
+/*#slide3{
+  background-color: #fff;
+  color: #333333;
+  height: 300px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 200px 0;
+}*/
+

@@ -59,6 +59,13 @@ text {
 </style>
 <body>
   <!-- <button>Toggle Sophomore Year Data</button> -->
+  <div id="slide1">
+  <div>
+    <div id="christmas_tree"> </div>
+  </div>
+</div>
+
+
 <script>
 
 
@@ -66,8 +73,8 @@ text {
 var links = [
 {"source": "Autri", "target": "Hong", "type": 1, "comment": "Southgate"},
 {"source": "Jess", "target": "Ramy", "type": 3, "comment": "DIRA"},
-{"source": "Autri", "target": "Wally", "type": 2, "comment": "AMI: Politics and Film"},
-{"source": "Sachin", "target": "Fred", "type": 5, "comment": "O-week"},
+{"source": "Autri", "target": "Wally", "type": 2, "comment": "AMI 160: Politics and Film"},
+// {"source": "Sachin", "target": "Fred", "type": 5, "comment": "O-week"},
     {"source": "Ramy", "target": "Frank", "type": 4, "comment": "Edens"},
     {"source": "Frank", "target": "Julian", "type": 4, "comment": "Edens"},
     {"source": "Ramy", "target": "Julian", "type": 4, "comment": "Edens"},
@@ -89,7 +96,7 @@ var links = [
 {"source": "Julian", "target": "Ramy", "type": 3, "comment": "DIRA"},
 {"source": "Jess", "target": "Autri", "type": 3, "comment": "DIRA"},
 {"source": "Autri", "target": "Susanna", "type": 1, "comment": "Southgate"},
-{"source": "Autri", "target": "Brian", "type": 2, "comment": "AMI: Politics and Film"},
+{"source": "Autri", "target": "Brian", "type": 2, "comment": "AMI 160: Politics and Film"},
 {"source": "Hong", "target": "Susanna", "type": 1, "comment": "Southgate"},
 {"source": "Susanna", "target": "Jane", "type": 2, "comment": "Mechanical Engineering"},
 {"source": "Jane", "target": "Justin", "type": 2, "comment": "Focus"},
@@ -98,7 +105,7 @@ var links = [
 {"source": "Jane", "target": "Justin", "type": 1, "comment": "Jarvis"},
 {"source": "Jane", "target": "Sachin", "type": 1, "comment": "Jarvis"},
 {"source": "Sachin", "target": "Justin", "type": 1, "comment": "Jarvis"},
-{"source": "Brian", "target": "Wally", "type": 2, "comment": "AMI: Politics and Film"}
+{"source": "Brian", "target": "Wally", "type": 2, "comment": "AMI 160: Politics and Film"}
 
 ];
 
@@ -314,19 +321,19 @@ d3.legend = function(g) {
         .attr("r","0.4em")
         .on("mouseover", function(d, i) {
         if (i == 0) {
-          svg.selectAll(".link" + ".dorm").style("stroke-width", "3.5px");
+          svg.selectAll(".link" + ".dorm").style("stroke-width", "4px");
         }
         else if (i == 2) {
-          svg.selectAll(".link" + ".class").style("stroke-width", "3.5px");
+          svg.selectAll(".link" + ".class").style("stroke-width", "4px");
         }
         else if (i == 1) {
           svg.selectAll(".link" + ".dira").style("stroke-width", "3.5px");
         }
+        // else if (i == 3) {
+        //   svg.selectAll(".link" + ".other").style("stroke-width", "3.5px");
+        // }
         else if (i == 3) {
-          svg.selectAll(".link" + ".other").style("stroke-width", "3.5px");
-        }
-        else if (i == 4) {
-          svg.selectAll(".link" + ".block").style("stroke-width", "3.5px");
+          svg.selectAll(".link" + ".block").style("stroke-width", "4px");
         }
         })
         .on("mouseout", function(d, i) {
@@ -339,10 +346,10 @@ d3.legend = function(g) {
         else if (i == 1) {
           svg.selectAll(".link" + ".dira").style("stroke-width", "1.5px");
         }
+        // else if (i == 3) {
+        //   svg.selectAll(".link" + ".other").style("stroke-width", "1.5px");
+        // }
         else if (i == 3) {
-          svg.selectAll(".link" + ".other").style("stroke-width", "1.5px");
-        }
-        else if (i == 4) {
           svg.selectAll(".link" + ".block").style("stroke-width", "1.5px");
         }
         })  
@@ -395,5 +402,10 @@ $('svg .link').tipsy({
 </script>
 
 
+<div id="slide2">
+  <div>
+    <div id="SecondPic"> </div>
+  </div>
+</div>
 </body>
 
