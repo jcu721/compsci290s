@@ -32,18 +32,27 @@
 
 .clear { clear: both; }
 
-#slide1, #slide2{ width: 100%; }
+#slide1, #slide2, #slide3{ width: 100%; }
 
 #slide1{
-  background:url('FoundersPic.jpg') 50% 0 no-repeat fixed;
+  background:url('GardensPic.jpg') 50% 0 no-repeat fixed;
   color: #fff;
-  height: 600px;
+  height: 400px;
   margin: 0;
   padding: 200px 0 260px 0;
   background-size: cover;
 }
 
 #slide2{
+  background:url('FoundersPic.jpg') 50% 0 no-repeat fixed;
+  color: #fff;
+  height: 400px;
+  margin: 0;
+  padding: 200px 0 50px 0;
+  background-size: cover;
+}
+
+#slide3{
   background:url('HousePic.jpg') 50% 0 no-repeat fixed;
   color: #fff;
   height: 600px;
@@ -51,6 +60,38 @@
   padding: 200px 0 260px 0;
   background-size: cover;
 }
+
+#CooperBlackLogo { 
+  background: url('CooperBlackLogo.jpg')no-repeat; 
+  width: 270px; 
+  height: 77px; 
+  margin: 0 auto; 
+  position: relative; 
+  bottom: -35px;
+}
+
+#founders {
+  border: 15px white;
+  width: 270px; 
+  height: 77px; 
+
+  position: relative; 
+  margin-top: 200px;
+}
+
+h1 {
+ font-family:"Arvo";
+font-weight:normal;
+font-size: 40px;
+text-align: left;
+color: #fff;
+margin: 10px;
+padding: 0;
+
+
+}
+
+
 
 /*#slide3{
   background-color: #fff;
