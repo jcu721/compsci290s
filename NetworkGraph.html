@@ -8,6 +8,7 @@
              button to toggle 2012 data-->
 
 <meta charset="utf-8">
+<head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.js"></script>
 <script src="JaneD3.js"></script>
 <script type="text/javascript" src="jquery.tipsy.js"></script>
@@ -15,6 +16,71 @@
 <link href="tipsy.css" rel="stylesheet" type="text/css" />
 <link href='http://fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic' rel='stylesheet' type='text/css'/>
 
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1.0', {'packages':['corechart']});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Category');
+        data.addColumn('number', 'Number of Messages Sent');
+        data.addRows([
+          ['Fri', 462],['Sat', 420],['Thu', 274],['Wed', 243],
+          ['Sun', 239],
+          ['Tue', 166],
+          ['Mon', 147],
+        ]);
+
+        var options = {'title':'Number of Messages Sent Per Day',
+                        'font': '17px', 
+                       'width':600,
+                       'height':380};
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+      
+    </script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Hour', 'Number of Messages'],
+          ['5 am',1],
+          ['8 am',6],
+          ['9 am',22],
+          ['10 am',51],
+          ['11 am',69],
+          ['12 pm',82],
+          ['1 pm',84],
+          ['2 pm',117],
+          ['3 pm',101],
+          ['4 pm',95],
+          ['5 pm',137],
+          ['6 pm',125],
+          ['7 pm',158],
+          ['8 pm',107],
+          ['9 pm',185],
+          ['10 pm',256],
+          ['11 pm',145],
+          ['12 am',71],
+          ['1 am',92],
+          ['2 am',39],
+          ['3 am',6],
+          ['4 am',2],
+        ]);
+
+      var options = {'title':'Number of Messages Sent Per Hour',
+                        'titleTextStyle': {'fontSize': 17.75},
+                       'width':700,
+                       'height':500,
+                      'margin-left': -100};
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div2'));
+        chart.draw(data, options);
+      }
+     </script>
+  </head>
 <style>
 
 .link {
@@ -411,6 +477,11 @@ $('svg .link').tipsy({
   <div>
     <div id="SecondPic"> </div>
   </div>
+</div>
+
+<div id = "graphs">
+    <div id="chart_div" style = {font-size: 20px}></div>
+    <div id="chart_div2"></div> 
 </div>
 </body>
 
